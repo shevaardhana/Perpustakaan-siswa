@@ -21,30 +21,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+
+                                        <tr v-for="keranjang in keranjangBuku" :key="keranjang.id">
                                             <td class="cart-pic first-row">
-                                                <img src="https://static-cse.canva.com/blob/448909/1003w-YYRVnwuENYI.jpg" />
+                                                <img :src="keranjang.photo" alt="" />
                                             </td>
                                             <td class="cart-title first-row text-center">
-                                                <h5>Pure Pineapple</h5>
+                                                <h5>{{keranjang.judul}}</h5>
                                             </td>
                                             <td class="p-price first-row"><input type="number" id="jumlah_buku" name="jumlah_buku" placeholder="0"></td>
-                                            <td class="delete-item"><a href="#"><i class="material-icons">
+                                            <td class="delete-item"><a href="#" @click="removeItem(index)"><i class="material-icons">
                                               close
                                               </i></a></td>
                                         </tr>
-                                        <tr>
-                                            <td class="cart-pic first-row">
-                                                <img src="https://static-cse.canva.com/blob/448909/1003w-YYRVnwuENYI.jpg" />
-                                            </td>
-                                            <td class="cart-title first-row text-center">
-                                                <h5>Pure Pineapple</h5>
-                                            </td>
-                                            <td class="p-price first-row"><input type="number" id="jumlah_buku" name="jumlah_buku" placeholder="0"></td>
-                                            <td class="delete-item"><a href="#"><i class="material-icons">
-                                              close
-                                              </i></a></td>
-                                        </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -94,6 +84,30 @@ export default {
   components: {
     Header,
     BreadCrumb
+  },
+  data(){
+      return{
+          keranjangBuku : []
+      }
+  },
+  methods:{
+      removeItem(index){
+        this.keranjangBuku.splice(index, 1);
+
+        const parsed = JSON.stringify(this.keranjangBuku);
+        localStorage.setItem('keranjangBuku', parsed);
+      }
+  },
+  mounted(){
+      if(localStorage.getItem('keranjangBuku')){
+          try{
+            this.keranjangBuku = JSON.parse(localStorage.getItem('keranjangBuku'));
+          }
+          
+          catch(e){
+              localStorage.removeItem('keranjangBuku');
+          }
+      }
   }
 }
 </script>

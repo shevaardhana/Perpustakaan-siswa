@@ -11,26 +11,20 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="product-pic-zoom">
-                                <img class="product-big-img" src="img/mickey1.jpg" alt="" />
+                                <img class="product-big-img" :src="bookDetail.photo" alt="" />
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="product-details">
                                 <div class="pd-title text-left">
-                                    <span>Kategori</span>
-                                    <h3>Judul</h3>
+                                    <span>{{bookDetail.category.kategori}}</span>
+                                    <h3>{{bookDetail.judul}}</h3>
                                 </div>
                                 <div class="pd-desc text-left">
-                                    <p>
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, error officia. Rem aperiam laborum voluptatum vel, pariatur modi hic provident eum iure natus quos non a sequi, id accusantium! Autem.
-                                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam possimus quisquam animi, commodi, nihil voluptate nostrum neque architecto illo officiis doloremque et corrupti cupiditate voluptatibus error illum. Commodi expedita animi nulla aspernatur.
-                                        Id asperiores blanditiis, omnis repudiandae iste inventore cum, quam sint molestiae accusamus voluptates ex tempora illum sit perspiciatis. Nostrum dolor tenetur amet, illo natus magni veniam quia sit nihil dolores.
-                                        Commodi ratione distinctio harum voluptatum velit facilis voluptas animi non laudantium, id dolorem atque perferendis enim ducimus? A exercitationem recusandae aliquam quod. Itaque inventore obcaecati, unde quam
-                                        impedit praesentium veritatis quis beatae ea atque perferendis voluptates velit architecto?
-                                    </p>
+                                    <p v-html="bookDetail.deskripsi"></p>
                                 </div>
                                 <div class="quantity">
-                                    <a href="shopping-cart.html" class="primary-btn pd-cart">Tambah Ke keranjang</a>
+                                    <a @click="saveKeranjang(bookDetail.id, bookDetail.judul, bookDetail.photo)" href="#" class="primary-btn pd-cart">Tambah Ke keranjang</a>
                                 </div>
                             </div>
                         </div>
@@ -47,12 +41,57 @@
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
 import BreadCrumb from '@/components/BreadCrumb.vue'
+import axios from 'axios'
 
 export default {
   name: 'Book',
   components: {
     Header,
     BreadCrumb
+  },
+  data(){
+      return{
+          bookDetail : [],
+          keranjangBuku : []
+      }
+  },
+
+methods:{
+    saveKeranjang(idBuku, judulBuku, photoBuku){
+
+        var bookStored = {
+            "id" : idBuku,
+            "judul" : judulBuku,
+            "photo" : photoBuku
+        }
+
+        this.keranjangBuku.push(bookStored);
+        const parsed = JSON.stringify(this.keranjangBuku);
+        localStorage.setItem('keranjangBuku', parsed);
+
+        window.location.href = '/'
+    }
+  },
+
+  mounted(){
+      if(localStorage.getItem('keranjangBuku')){
+          try{
+            this.keranjangBuku = JSON.parse(localStorage.getItem('keranjangBuku'));
+          }
+          
+          catch(e){
+              localStorage.removeItem('keranjangBuku');
+          }
+      }
+
+      axios
+        .get("http://127.0.0.1:8000/api/books", {
+            params : {
+                id: this.$route.params.id
+            }
+        })
+        .then(res => (this.bookDetail = res.data.data))
+        .catch(err => console.log(err));
   }
 }
 </script>

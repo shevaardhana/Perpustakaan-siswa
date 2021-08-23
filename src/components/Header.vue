@@ -26,45 +26,37 @@
                                 Keranjang Buku &nbsp;
                                 <a href="#">
                                     <i class="icon_book_alt"></i>
-                                    <span>3</span>
+                                    <span>{{ keranjangBuku.length }}</span>
                                 </a>
                                 <div class="cart-hover">
                                     <div class="select-items">
                                         <table>
-                                            <tbody>
-                                                <tr>
+                                            <tbody v-if="keranjangBuku.length > 0">
+
+                                                <tr v-for="keranjang in keranjangBuku" :key="keranjang.id">
                                                     <td class="si-pic">
-                                                        <img src="img/select-product-1.jpg" alt="" />
+                                                        <img :src="keranjang.photo" alt="" />
                                                     </td>
                                                     <td class="si-text">
                                                         <div class="product-selected">
-                                                            
-                                                            <h6>Kabino Bedside Table</h6>
+                                                            <h6 class="text-warning">{{keranjang.judul}}</h6>
                                                         </div>
                                                     </td>
-                                                    <td class="si-close">
+                                                    <td @click="removeItem(index)" class="si-close">
                                                         <i class="ti-close"></i>
                                                     </td>
                                                 </tr>
+                                            </tbody>
+
+                                            <tbody v-else>
                                                 <tr>
-                                                    <td class="si-pic">
-                                                        <img src="img/select-product-2.jpg" alt="" />
-                                                    </td>
-                                                    <td class="si-text">
-                                                        <div class="product-selected">
-                                                            
-                                                            <h6>Kabino Bedside Table</h6>
-                                                        </div>
-                                                    </td>
-                                                    <td class="si-close">
-                                                        <i class="ti-close"></i>
-                                                    </td>
+                                                    <td>Keranjang Kosong</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="select-button">
-                                        <a href="#" class="primary-btn checkout-btn">TAKE</a>
+                                        <a href="/ambil-buku" class="primary-btn checkout-btn">TAKE</a>
                                     </div>
                                 </div>
                             </li>
@@ -78,6 +70,36 @@
 
 <script>
 export default {
-  name: 'Header'
+  name: 'Header',
+  data(){
+      return{
+          keranjangBuku : []
+      }
+  },
+  methods:{
+      removeItem(index){
+        this.keranjangBuku.splice(index, 1);
+
+        const parsed = JSON.stringify(this.keranjangBuku);
+        localStorage.setItem('keranjangBuku', parsed);
+      }
+  },
+  mounted(){
+      if(localStorage.getItem('keranjangBuku')){
+          try{
+            this.keranjangBuku = JSON.parse(localStorage.getItem('keranjangBuku'));
+          }
+          
+          catch(e){
+              localStorage.removeItem('keranjangBuku');
+          }
+      }
+  }
 }
 </script>
+<style scoped>
+img{
+    width: 70px;
+    height: 80px;
+}
+</style>
