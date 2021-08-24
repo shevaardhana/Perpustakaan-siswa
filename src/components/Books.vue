@@ -10,7 +10,7 @@
                             <img v-bind:src="itemBook.photo" />
                             <ul>
                                 <li class="w-icon active">
-                                    <a @click="saveKeranjang(itemBook.id, itemBook.judul, itemBook.photo)" href="#"><i class="fa fa-plus"></i></a>
+                                    <router-link v-bind:to="'/buku/'+itemBook.id"><i class="fa fa-info"></i></router-link>
                                 </li>
                                 <li class="quick-view"><router-link v-bind:to="'/buku/'+itemBook.id">+ Deskripsi</router-link></li>
                             </ul>
@@ -33,23 +33,7 @@ export default {
   data(){
       return{
           books : [],
-          keranjangBuku : []
       };
-  },
-
-methods:{
-    saveKeranjang(idBuku, judulBuku, photoBuku){
-
-        var bookStored = {
-            "id" : idBuku,
-            "judul" : judulBuku,
-            "photo" : photoBuku
-        }
-
-        this.keranjangBuku.push(bookStored);
-        const parsed = JSON.stringify(this.keranjangBuku);
-        localStorage.setItem('keranjangBuku', parsed);
-    }
   },
 
   mounted(){
