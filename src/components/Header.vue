@@ -40,6 +40,7 @@
                                                     <td class="si-text">
                                                         <div class="product-selected">
                                                             <h6 class="text-warning">{{keranjang.judul}}</h6>
+                                                            <p style="color:black;">{{keranjang.jumlah}}x</p>
                                                         </div>
                                                     </td>
                                                     <td @click="removeItem(index)" class="si-close">

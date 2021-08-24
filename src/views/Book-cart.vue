@@ -16,7 +16,7 @@
                                         <tr>
                                             <th>Image</th>
                                             <th class="p-name text-center">Judul Buku</th>
-                                            <th>Jumlah Pinjam</th>
+                                            <th class="p-name text-center">Jumlah Buku</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -29,7 +29,9 @@
                                             <td class="cart-title first-row text-center">
                                                 <h5>{{keranjang.judul}}</h5>
                                             </td>
-                                            <td class="p-price first-row"><input type="number" id="jumlah_buku" name="jumlah_buku" placeholder="0"></td>
+                                            <td class="cart-title first-row text-center">
+                                                <h5>{{keranjang.jumlah}}</h5>
+                                            </td>
                                             <td class="delete-item"><a href="#" @click="removeItem(index)"><i class="material-icons">
                                               close
                                               </i></a></td>
@@ -47,23 +49,39 @@
                                 <form>
                                     <div class="form-group">
                                         <label for="NIS">NIS</label>
-                                        <input type="text" class="form-control" id="no_siswa" aria-describedby="noHelp" placeholder="Masukan NIS">
+                                        <input type="text" 
+                                        class="form-control" id="no_siswa" 
+                                        aria-describedby="noHelp" 
+                                        placeholder="Masukan NIS"
+                                        v-model="siswaInfo.no_siswa">
                                     </div>
                                     <div class="form-group">
                                         <label for="nama">Nama Lengkap</label>
-                                        <input type="text" class="form-control" id="nama" aria-describedby="namaHelp" placeholder="Masukan Nama">
+                                        <input type="text" 
+                                        class="form-control" 
+                                        id="nama" aria-describedby="namaHelp" 
+                                        placeholder="Masukan Nama"
+                                        v-model="siswaInfo.nama">
                                     </div>
                                     <div class="form-group">
                                         <label for="tanggal_pinjam">Tanggal Pinjam</label>
-                                        <input type="date" class="form-control" id="tanggal_pinjam" aria-describedby="tanggal_pinjamHelp">
+                                        <input type="date" 
+                                        class="form-control" 
+                                        id="tanggal_pinjam" 
+                                        aria-describedby="tanggal_pinjamHelp"
+                                        v-model="siswaInfo.tanggal_pinjam">
                                     </div>
                                     <div class="form-group">
                                         <label for="tanggal_pengembalian">Tanggal Pengembalian</label>
-                                        <input type="date" class="form-control" id="tanggal_pengembalian" aria-describedby="tanggal_pengembalianHelp">
+                                        <input type="date" 
+                                        class="form-control" 
+                                        id="tanggal_pengembalian" 
+                                        aria-describedby="tanggal_pengembalianHelp"
+                                        v-model="siswaInfo.tanggal_pengembalian">
                                     </div>
                                 </form>
                             </div>
-                            <button type="submit" href="success.html" class="btn btn-success btn-lg btn-block">Ayo Ambil !!!</button>
+                            <button type="submit" @click="take()" href="#" class="btn btn-success btn-lg btn-block">Ayo Ambil !!!</button>
                         </div>
                     </div>
                 </div>
@@ -78,6 +96,7 @@
 // @ is an alias to /src
 import Header from '@/components/Header.vue'
 import BreadCrumb from '@/components/BreadCrumb.vue'
+import axios from 'axios'
 
 export default {
   name: 'Book-cart',
@@ -87,7 +106,13 @@ export default {
   },
   data(){
       return{
-          keranjangBuku : []
+          keranjangBuku : [],
+          siswaInfo : {
+              no_siswa : '',
+              nama : '',
+              tanggal_pinjam : '',
+              tanggal_pengembalian : '',
+          },
       }
   },
   methods:{
@@ -96,6 +121,25 @@ export default {
 
         const parsed = JSON.stringify(this.keranjangBuku);
         localStorage.setItem('keranjangBuku', parsed);
+      },
+      take(){
+          let bukuIds = this.keranjangBuku.map(function(book){
+              return book.id
+          });
+
+          let takeData = {
+              'no_siswa' : this.siswaInfo.no_siswa,
+              'nama' : this.siswaInfo.nama,
+              'tanggal_pinjam' : this.siswaInfo.tanggal_pinjam,
+              'tanggal_pengembalian' : this.siswaInfo.tanggal_pengembalian,
+              "status" : 'PROCESS',
+              "transaction_details" : bukuIds,    
+          };
+          axios
+            .post("http://127.0.0.1:8000/api/take",takeData)
+            .then(() => this.$router.push("success"))
+            .catch(err => console.log(err));
+            console.log(this.$refs)
       }
   },
   mounted(){
