@@ -16,7 +16,6 @@
                                         <tr>
                                             <th>Image</th>
                                             <th class="p-name text-center">Judul Buku</th>
-                                            <th class="p-name text-center">Jumlah Buku</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -28,9 +27,6 @@
                                             </td>
                                             <td class="cart-title first-row text-center">
                                                 <h5>{{keranjang.judul}}</h5>
-                                            </td>
-                                            <td class="cart-title first-row text-center">
-                                                <h5>{{keranjang.jumlah}}</h5>
                                             </td>
                                             <td class="delete-item"><a href="#" @click="removeItem(index)"><i class="material-icons">
                                               close
@@ -81,7 +77,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <button type="submit" @click="take()" href="#" class="btn btn-success btn-lg btn-block">Ayo Ambil !!!</button>
+                            <button type="submit" @click="take()" href="/success" class="btn btn-success btn-lg btn-block">Ayo Ambil !!!</button>
                         </div>
                     </div>
                 </div>
@@ -133,7 +129,7 @@ export default {
               'tanggal_pinjam' : this.siswaInfo.tanggal_pinjam,
               'tanggal_pengembalian' : this.siswaInfo.tanggal_pengembalian,
               "status" : 'PROCESS',
-              "transaction_details" : bukuIds,    
+              "transaction_details" : bukuIds
           };
           axios
             .post("http://127.0.0.1:8000/api/take",takeData)

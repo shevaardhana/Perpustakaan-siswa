@@ -22,10 +22,9 @@
                                 </div>
                                 <div class="pd-desc text-left">
                                     <p v-html="bookDetail.deskripsi"></p>
-                                    <input type="number" id="jumlah_buku" name="jumlah_buku" min="1" v-model="jumlah_buku">
                                 </div>
                                 <div class="quantity">
-                                    <a @click="saveKeranjang(bookDetail.id, bookDetail.judul, bookDetail.photo, jumlah_buku)" href="#" class="primary-btn pd-cart mr-2">Tambah Ke keranjang</a>
+                                    <a @click="saveKeranjang(bookDetail.id, bookDetail.judul, bookDetail.photo)" href="#" class="primary-btn pd-cart mr-2">Tambah Ke keranjang</a>
                                 </div>
                                 
                             </div>
@@ -59,13 +58,12 @@ export default {
   },
 
 methods:{
-    saveKeranjang(idBuku, judulBuku, photoBuku, jumlah_buku){
+    saveKeranjang(idBuku, judulBuku, photoBuku){
 
         var bookStored = {
             "id" : idBuku,
             "judul" : judulBuku,
             "photo" : photoBuku,
-            "jumlah" : jumlah_buku
         }
 
         this.keranjangBuku.push(bookStored);

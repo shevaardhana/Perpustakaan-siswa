@@ -12,7 +12,7 @@
                                 <li class="w-icon active">
                                     <router-link v-bind:to="'/buku/'+itemBook.id"><i class="fa fa-info"></i></router-link>
                                 </li>
-                                <li class="quick-view"><router-link v-bind:to="'/buku/'+itemBook.id">+ Deskripsi</router-link></li>
+                                <li class="quick-view"><router-link v-bind:to="'/buku/'+itemBook.id">Deskripsi</router-link></li>
                             </ul>
                             <h5>{{itemBook.judul}}</h5>
                             <span class="badge badge-secondary">{{itemBook.category.kategori}}</span>
