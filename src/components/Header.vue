@@ -42,7 +42,7 @@
                                                             <h6 class="text-warning">{{keranjang.judul}}</h6>
                                                         </div>
                                                     </td>
-                                                    <td @click="removeItem(index)" class="si-close">
+                                                    <td @click="removeItem(keranjang.id)" class="si-close">
                                                         <i class="ti-close"></i>
                                                     </td>
                                                 </tr>
@@ -77,11 +77,16 @@ export default {
       }
   },
   methods:{
-      removeItem(index){
+      removeItem(idx){
+        let kerangjangStorage = JSON.parse(localStorage.getItem("keranjangBuku"));
+        let itemKeranjangStorage = kerangjangStorage.map(itemKeranjangStorage => itemKeranjangStorage.id);
+        
+        let index = itemKeranjangStorage.findIndex(id => id == idx);
         this.keranjangBuku.splice(index, 1);
 
         const parsed = JSON.stringify(this.keranjangBuku);
-        localStorage.setItem('keranjangBuku', parsed);
+        localStorage.setItem("keranjangBuku", parsed);
+        window.location.reload();
       }
   },
   mounted(){
